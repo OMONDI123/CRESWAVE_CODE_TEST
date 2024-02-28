@@ -1,0 +1,546 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.23 (Ubuntu 10.23-0ubuntu0.18.04.2)
+-- Dumped by pg_dump version 10.23 (Ubuntu 10.23-0ubuntu0.18.04.2)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: ad_blog; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_blog (
+    ad_blog_id bigint NOT NULL,
+    ammend boolean DEFAULT false,
+    approval_stage character varying(255),
+    created timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by bigint,
+    doc_status character varying(255),
+    document_no character varying(255),
+    is_active boolean DEFAULT true,
+    is_approved boolean DEFAULT false,
+    processed boolean DEFAULT false,
+    processing boolean DEFAULT false,
+    reject boolean DEFAULT false,
+    updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_by bigint NOT NULL,
+    blog_description character varying(255),
+    file_name character varying(255),
+    filepath character varying(255),
+    blog_name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.ad_blog OWNER TO adempiere;
+
+--
+-- Name: ad_blog_aud; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_blog_aud (
+    ad_blog_id bigint NOT NULL,
+    rev integer NOT NULL,
+    revtype smallint,
+    blog_description character varying(255),
+    file_name character varying(255),
+    filepath character varying(255),
+    blog_name character varying(255)
+);
+
+
+ALTER TABLE public.ad_blog_aud OWNER TO adempiere;
+
+--
+-- Name: ad_comment; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_comment (
+    ad_comment_id bigint NOT NULL,
+    ammend boolean DEFAULT false,
+    approval_stage character varying(255),
+    created timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by bigint,
+    doc_status character varying(255),
+    document_no character varying(255),
+    is_active boolean DEFAULT true,
+    is_approved boolean DEFAULT false,
+    processed boolean DEFAULT false,
+    processing boolean DEFAULT false,
+    reject boolean DEFAULT false,
+    updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_by bigint NOT NULL,
+    blog_description character varying(30000) NOT NULL,
+    ad_blog_id bigint,
+    ad_user_id bigint
+);
+
+
+ALTER TABLE public.ad_comment OWNER TO adempiere;
+
+--
+-- Name: ad_comment_aud; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_comment_aud (
+    ad_comment_id bigint NOT NULL,
+    rev integer NOT NULL,
+    revtype smallint,
+    blog_description character varying(30000),
+    ad_blog_id bigint,
+    ad_user_id bigint
+);
+
+
+ALTER TABLE public.ad_comment_aud OWNER TO adempiere;
+
+--
+-- Name: ad_role; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_role (
+    ad_role_id bigint NOT NULL,
+    ammend boolean DEFAULT false,
+    approval_stage character varying(255),
+    created timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by bigint,
+    doc_status character varying(255),
+    document_no character varying(255),
+    is_active boolean DEFAULT true,
+    is_approved boolean DEFAULT false,
+    processed boolean DEFAULT false,
+    processing boolean DEFAULT false,
+    reject boolean DEFAULT false,
+    updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_by bigint NOT NULL,
+    description character varying(255),
+    role_name character varying(255)
+);
+
+
+ALTER TABLE public.ad_role OWNER TO adempiere;
+
+--
+-- Name: ad_role_aud; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_role_aud (
+    ad_role_id bigint NOT NULL,
+    rev integer NOT NULL,
+    revtype smallint,
+    description character varying(255),
+    role_name character varying(255)
+);
+
+
+ALTER TABLE public.ad_role_aud OWNER TO adempiere;
+
+--
+-- Name: ad_user; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_user (
+    ad_user_id bigint NOT NULL,
+    ammend boolean DEFAULT false,
+    approval_stage character varying(255),
+    created timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_by bigint,
+    doc_status character varying(255),
+    document_no character varying(255),
+    is_active boolean DEFAULT true,
+    is_approved boolean DEFAULT false,
+    processed boolean DEFAULT false,
+    processing boolean DEFAULT false,
+    reject boolean DEFAULT false,
+    updated timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_by bigint NOT NULL,
+    date_of_birth character varying(255),
+    email character varying(255),
+    fullname character varying(255),
+    password character varying(255)
+);
+
+
+ALTER TABLE public.ad_user OWNER TO adempiere;
+
+--
+-- Name: ad_user_aud; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_user_aud (
+    ad_user_id bigint NOT NULL,
+    rev integer NOT NULL,
+    revtype smallint,
+    date_of_birth character varying(255),
+    email character varying(255),
+    fullname character varying(255),
+    password character varying(255)
+);
+
+
+ALTER TABLE public.ad_user_aud OWNER TO adempiere;
+
+--
+-- Name: ad_user_role; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_user_role (
+    user_ad_user_id bigint NOT NULL,
+    roles_ad_role_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.ad_user_role OWNER TO adempiere;
+
+--
+-- Name: ad_user_role_aud; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.ad_user_role_aud (
+    rev integer NOT NULL,
+    user_ad_user_id bigint NOT NULL,
+    roles_ad_role_id bigint NOT NULL,
+    revtype smallint
+);
+
+
+ALTER TABLE public.ad_user_role_aud OWNER TO adempiere;
+
+--
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: adempiere
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO adempiere;
+
+--
+-- Name: revinfo; Type: TABLE; Schema: public; Owner: adempiere
+--
+
+CREATE TABLE public.revinfo (
+    rev integer NOT NULL,
+    revtstmp bigint
+);
+
+
+ALTER TABLE public.revinfo OWNER TO adempiere;
+
+--
+-- Data for Name: ad_blog; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_blog (ad_blog_id, ammend, approval_stage, created, created_by, doc_status, document_no, is_active, is_approved, processed, processing, reject, updated, updated_by, blog_description, file_name, filepath, blog_name) FROM stdin;
+9	f	Approved	2024-02-28 20:05:57.552	0	\N	\N	t	t	f	f	f	2024-02-28 20:05:57.552	0	Blog Tes2	ASKSLEEK.jpg	http://localhost/blogs/uploads/ASKSLEEK.jpg	Blog test2
+11	f	Approved	2024-02-28 20:08:49.789	0	\N	\N	t	t	f	f	f	2024-02-28 20:08:49.789	0	Test Blogs	ASKSLEEK.jpg	http://localhost/blogs/uploads/ASKSLEEK.jpg	Blogs
+7	f	Approved	2024-02-28 19:59:32.217	0	\N	\N	f	t	f	f	f	2024-02-28 19:59:32.217	13	Blog Test	ASKSLEEK.jpg	http://localhost/tutorials/uploads/ASKSLEEK.jpg	Blog
+\.
+
+
+--
+-- Data for Name: ad_blog_aud; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_blog_aud (ad_blog_id, rev, revtype, blog_description, file_name, filepath, blog_name) FROM stdin;
+7	8	0	Blog Test	ASKSLEEK.jpg	http://localhost/tutorials/uploads/ASKSLEEK.jpg	Blog
+9	10	0	Blog Tes2	ASKSLEEK.jpg	http://localhost/blogs/uploads/ASKSLEEK.jpg	Blog test2
+11	12	0	Test Blogs	ASKSLEEK.jpg	http://localhost/blogs/uploads/ASKSLEEK.jpg	Blogs
+\.
+
+
+--
+-- Data for Name: ad_comment; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_comment (ad_comment_id, ammend, approval_stage, created, created_by, doc_status, document_no, is_active, is_approved, processed, processing, reject, updated, updated_by, blog_description, ad_blog_id, ad_user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ad_comment_aud; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_comment_aud (ad_comment_id, rev, revtype, blog_description, ad_blog_id, ad_user_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: ad_role; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_role (ad_role_id, ammend, approval_stage, created, created_by, doc_status, document_no, is_active, is_approved, processed, processing, reject, updated, updated_by, description, role_name) FROM stdin;
+1	f	Approved	2024-02-28 19:57:46.204	0	\N	\N	t	t	f	f	f	2024-02-28 19:57:46.204	0	Admin	ROLE_ADMIN
+3	f	Approved	2024-02-28 19:58:07.718	0	\N	\N	t	t	f	f	f	2024-02-28 19:58:07.718	0	User	ROLE_USER
+\.
+
+
+--
+-- Data for Name: ad_role_aud; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_role_aud (ad_role_id, rev, revtype, description, role_name) FROM stdin;
+1	2	0	Admin	ROLE_ADMIN
+3	4	0	User	ROLE_USER
+\.
+
+
+--
+-- Data for Name: ad_user; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_user (ad_user_id, ammend, approval_stage, created, created_by, doc_status, document_no, is_active, is_approved, processed, processing, reject, updated, updated_by, date_of_birth, email, fullname, password) FROM stdin;
+5	f	Approved	2024-02-28 19:58:57.527	0	\N	\N	t	t	f	f	f	2024-02-28 19:58:57.527	0	20th/Oct/2000	bunde@gmail.com	Austine Bunde	$2a$10$eqIqFFrSfuKFrl5IPP.oQOth8LdA.smqk.jQeAdjnMEEMueh4QLKe
+13	f	Approved	2024-02-28 21:24:10.652	0	\N	\N	t	t	f	f	f	2024-02-28 21:24:10.652	0	20th/Jan/Dec	kyalo@gmail.com	Kyalo Benjamin	$2a$10$zPS.gZn.7Z.mtmRpLCB6aeTQLzGMRY2rda6kbzrRXi5FPfN1hEScO
+\.
+
+
+--
+-- Data for Name: ad_user_aud; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_user_aud (ad_user_id, rev, revtype, date_of_birth, email, fullname, password) FROM stdin;
+5	6	0	20th/Oct/2000	bunde@gmail.com	Austine Bunde	$2a$10$eqIqFFrSfuKFrl5IPP.oQOth8LdA.smqk.jQeAdjnMEEMueh4QLKe
+13	14	0	20th/Jan/Dec	kyalo@gmail.com	Kyalo Benjamin	$2a$10$zPS.gZn.7Z.mtmRpLCB6aeTQLzGMRY2rda6kbzrRXi5FPfN1hEScO
+\.
+
+
+--
+-- Data for Name: ad_user_role; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_user_role (user_ad_user_id, roles_ad_role_id) FROM stdin;
+5	1
+13	3
+\.
+
+
+--
+-- Data for Name: ad_user_role_aud; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.ad_user_role_aud (rev, user_ad_user_id, roles_ad_role_id, revtype) FROM stdin;
+6	5	1	0
+14	13	3	0
+\.
+
+
+--
+-- Data for Name: revinfo; Type: TABLE DATA; Schema: public; Owner: adempiere
+--
+
+COPY public.revinfo (rev, revtstmp) FROM stdin;
+2	1709139466215
+4	1709139487719
+6	1709139537538
+8	1709139572219
+10	1709139957567
+12	1709140129806
+14	1709144650669
+\.
+
+
+--
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: adempiere
+--
+
+SELECT pg_catalog.setval('public.hibernate_sequence', 14, true);
+
+
+--
+-- Name: ad_blog_aud ad_blog_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_blog_aud
+    ADD CONSTRAINT ad_blog_aud_pkey PRIMARY KEY (ad_blog_id, rev);
+
+
+--
+-- Name: ad_blog ad_blog_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_blog
+    ADD CONSTRAINT ad_blog_pkey PRIMARY KEY (ad_blog_id);
+
+
+--
+-- Name: ad_comment_aud ad_comment_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_comment_aud
+    ADD CONSTRAINT ad_comment_aud_pkey PRIMARY KEY (ad_comment_id, rev);
+
+
+--
+-- Name: ad_comment ad_comment_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_comment
+    ADD CONSTRAINT ad_comment_pkey PRIMARY KEY (ad_comment_id);
+
+
+--
+-- Name: ad_role_aud ad_role_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_role_aud
+    ADD CONSTRAINT ad_role_aud_pkey PRIMARY KEY (ad_role_id, rev);
+
+
+--
+-- Name: ad_role ad_role_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_role
+    ADD CONSTRAINT ad_role_pkey PRIMARY KEY (ad_role_id);
+
+
+--
+-- Name: ad_user_aud ad_user_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_aud
+    ADD CONSTRAINT ad_user_aud_pkey PRIMARY KEY (ad_user_id, rev);
+
+
+--
+-- Name: ad_user ad_user_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user
+    ADD CONSTRAINT ad_user_pkey PRIMARY KEY (ad_user_id);
+
+
+--
+-- Name: ad_user_role_aud ad_user_role_aud_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_role_aud
+    ADD CONSTRAINT ad_user_role_aud_pkey PRIMARY KEY (rev, user_ad_user_id, roles_ad_role_id);
+
+
+--
+-- Name: ad_user_role ad_user_role_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_role
+    ADD CONSTRAINT ad_user_role_pkey PRIMARY KEY (user_ad_user_id, roles_ad_role_id);
+
+
+--
+-- Name: revinfo revinfo_pkey; Type: CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.revinfo
+    ADD CONSTRAINT revinfo_pkey PRIMARY KEY (rev);
+
+
+--
+-- Name: ad_comment fk18pqtiqki5uy8p57154404b; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_comment
+    ADD CONSTRAINT fk18pqtiqki5uy8p57154404b FOREIGN KEY (ad_user_id) REFERENCES public.ad_user(ad_user_id) ON DELETE CASCADE;
+
+
+--
+-- Name: ad_user_aud fk24l9hfwayb316u7eqlsn2811j; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_aud
+    ADD CONSTRAINT fk24l9hfwayb316u7eqlsn2811j FOREIGN KEY (rev) REFERENCES public.revinfo(rev);
+
+
+--
+-- Name: ad_comment fk66dq82hqxhmwpg0tkytp1x7yt; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_comment
+    ADD CONSTRAINT fk66dq82hqxhmwpg0tkytp1x7yt FOREIGN KEY (ad_blog_id) REFERENCES public.ad_blog(ad_blog_id) ON DELETE CASCADE;
+
+
+--
+-- Name: ad_user_role fk7g39yci8q7mmwa35xrr35pdc6; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_role
+    ADD CONSTRAINT fk7g39yci8q7mmwa35xrr35pdc6 FOREIGN KEY (roles_ad_role_id) REFERENCES public.ad_role(ad_role_id);
+
+
+--
+-- Name: ad_comment_aud fk8muc995nnko6x5panrojh9e4h; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_comment_aud
+    ADD CONSTRAINT fk8muc995nnko6x5panrojh9e4h FOREIGN KEY (rev) REFERENCES public.revinfo(rev);
+
+
+--
+-- Name: ad_blog_aud fkc569apb8m2gcwcsd7hcs2xr89; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_blog_aud
+    ADD CONSTRAINT fkc569apb8m2gcwcsd7hcs2xr89 FOREIGN KEY (rev) REFERENCES public.revinfo(rev);
+
+
+--
+-- Name: ad_user_role_aud fkhnb6q48n8jdomdf1j480qu067; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_role_aud
+    ADD CONSTRAINT fkhnb6q48n8jdomdf1j480qu067 FOREIGN KEY (rev) REFERENCES public.revinfo(rev);
+
+
+--
+-- Name: ad_user_role fkjsqogp3plj7rv1k2ty97m5etd; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_user_role
+    ADD CONSTRAINT fkjsqogp3plj7rv1k2ty97m5etd FOREIGN KEY (user_ad_user_id) REFERENCES public.ad_user(ad_user_id);
+
+
+--
+-- Name: ad_role_aud fkpl4ymi1vy0844918bwvxm92tx; Type: FK CONSTRAINT; Schema: public; Owner: adempiere
+--
+
+ALTER TABLE ONLY public.ad_role_aud
+    ADD CONSTRAINT fkpl4ymi1vy0844918bwvxm92tx FOREIGN KEY (rev) REFERENCES public.revinfo(rev);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
