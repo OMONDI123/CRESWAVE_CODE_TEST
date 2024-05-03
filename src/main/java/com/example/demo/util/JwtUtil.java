@@ -22,7 +22,7 @@ public class JwtUtil {
 	private String jwtSecret;
 
 	@Value("${bezkoder.app.jwtExpirationMs}")
-	private int jwtExpirationMs;
+	private int jwtExpirationMs;   
 
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();

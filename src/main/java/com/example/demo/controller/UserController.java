@@ -52,7 +52,7 @@ public class UserController {
 	}
 
 	@PostMapping(value="/createUser",produces = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	//@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String createUser(@RequestBody UserDetails user) {
 		User createdUser = service.createUser(user);

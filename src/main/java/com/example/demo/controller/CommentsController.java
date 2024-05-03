@@ -101,36 +101,36 @@ public class CommentsController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ResponseBody
 	public String getCommentByPage(@PathVariable int page, @PathVariable int size) {
-		List<Comment> Comment = service.getCommentByPageAndSize(page, size);
+		List<Comment> comment = service.getCommentByPageAndSize(page, size);
 		logger.debug("Called CommentController.getCommentByPage");
-		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(Comment);
+		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(comment);
 	}
 	
 	@GetMapping(value="/getCommentByUserAndBlog/{user_id}/{blog_id}",produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getCommentByUserAndBlog(@PathVariable int user_id, @PathVariable int blog_id) {
-		List<Comment> Comment = service.findCommentByUserAndBlog(user_id, blog_id);
+		List<Comment> comment = service.findCommentByUserAndBlog(user_id, blog_id);
 		logger.debug("Called CommentController.getCommentByPage");
-		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(Comment);
+		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(comment);
 	}
 	
 	@GetMapping(value="/getCommentByUser/{user_id}",produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getCommentByUser(@PathVariable int user_id) {
-		List<Comment> Comment = service.findCommentByUser(user_id);
+		List<Comment> comment = service.findCommentByUser(user_id);
 		logger.debug("Called CommentController.getCommentByPage");
-		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(Comment);
+		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(comment);
 	}
 	
 	@GetMapping(value="/getCommentByBlog/{blog_id}",produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getCommentByBlog( @PathVariable int blog_id) {
-		List<Comment> Comment = service.findCommentByBlog( blog_id);
+		List<Comment> comment = service.findCommentByBlog( blog_id);
 		logger.debug("Called CommentController.getCommentByPage");
-		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(Comment);
+		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(comment);
 	}
 
 }
