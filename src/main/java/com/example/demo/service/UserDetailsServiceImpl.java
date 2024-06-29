@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
@@ -31,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(userName);
+		User user = userRepository.findTop1ByEmail(userName);
 		final String ip = getClientIP();
 		if (loginAttemptService.isBlocked(ip)) {
 			throw new RuntimeException("blocked");

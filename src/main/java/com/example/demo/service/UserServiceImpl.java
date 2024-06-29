@@ -16,12 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.Blogs;
 import com.example.demo.entity.Roles;
 import com.example.demo.entity.User;
 import com.example.demo.exceptions.SetUpExceptions;
 import com.example.demo.model.UserDetails;
-import com.example.demo.model.UserModel;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 

@@ -28,6 +28,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Audited
 public class Comment extends AuditModel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy =GenerationType.AUTO )
 	@Column(name = "ad_comment_id")

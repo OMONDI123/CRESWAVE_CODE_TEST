@@ -5,12 +5,10 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,9 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.User;
 import com.example.demo.model.UserDetails;
-import com.example.demo.model.UserModel;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.example.demo.util.HibernateProxyTypeAdapter;
+import com.example.demo.util.ResponseEntity;
 import com.google.gson.GsonBuilder;
 
 /**
@@ -39,10 +38,14 @@ import com.google.gson.GsonBuilder;
 @CrossOrigin
 public class UserController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired private UserService service;
-	
-	@GetMapping(value="/getUserById/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@Autowired
+	private UserService service;
+
+	@Autowired
+	private UserRepository repo;
+
+	@GetMapping(value = "/getUserById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getUserById(@PathVariable Long id) {
@@ -51,36 +54,50 @@ public class UserController {
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(user);
 	}
 
-	@PostMapping(value="/createUser",produces = MediaType.APPLICATION_JSON_VALUE)
-	//@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	@PostMapping(value = "/createUser", produces = MediaType.APPLICATION_JSON_VALUE)
+	// @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String createUser(@RequestBody UserDetails user) {
+		String message = "";
+		User existingUser = repo.findTop1ByEmail(user.getEmail());
+		if (existingUser != null) {
+			message = "User with the same Username or email already exists. Please use a different email or username";
+			throw new DuplicateKeyException(
+					"User with the same Username or email already exists. Please use a different email or username");
+		}
+
 		User createdUser = service.createUser(user);
 		logger.debug("Called UserController.createUser");
+		message = "User Added Successfully.";
+		ResponseEntity<?> response = new ResponseEntity<User>(message, 200, createdUser);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(createdUser);
+				.toJson(response);
 	}
 
-	@PostMapping(value="/updateUser",produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/updateUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	public String updateUser(@RequestBody UserDetails user) {
 		User updatedUser = service.updateUser(user);
 		logger.debug("Called UserController.updateUser");
+		String message = "User Updated Successfully.";
+		ResponseEntity<?> response = new ResponseEntity<User>(message, 200, updatedUser);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(updatedUser);
+				.toJson(response);
 	}
 
-	@PutMapping(value="/deActivateUserByID/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/deActivateUserByID/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String deleteById(@PathVariable Long id) {
 		User deletedUser = service.deleteById(id);
 		logger.debug("Called UserController.deleteById");
+		String message = "User Deleted Successfully.";
+		ResponseEntity<?> response = new ResponseEntity<User>(message, 200, deletedUser);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(deletedUser);
+				.toJson(response);
 	}
 
-	@GetMapping(value="/getAllUserList",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getAllUserList", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getAllUser() {
@@ -89,7 +106,7 @@ public class UserController {
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(user);
 	}
 
-	@GetMapping(value="/getActiveUser",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getActiveUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getActiveUser() {
@@ -99,7 +116,7 @@ public class UserController {
 	}
 
 //Typical Pagination implementation
-	@GetMapping(value="/getUserByPage/{page}/{size}",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getUserByPage/{page}/{size}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getUserByPage(@PathVariable int page, @PathVariable int size) {

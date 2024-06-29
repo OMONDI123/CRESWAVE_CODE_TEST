@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Roles;
-import com.example.demo.entity.User;
 import com.example.demo.exceptions.SetUpExceptions;
 import com.example.demo.model.RoleModel;
 import com.example.demo.repository.RoleRepository;

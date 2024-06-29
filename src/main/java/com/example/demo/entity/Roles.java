@@ -16,6 +16,11 @@ import org.hibernate.envers.Audited;
 @Table(name = "ad_role")
 @Audited
 public class Roles extends AuditModel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ad_role_id")

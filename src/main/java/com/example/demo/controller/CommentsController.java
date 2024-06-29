@@ -5,8 +5,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,7 @@ import com.example.demo.entity.Comment;
 import com.example.demo.model.CommentModel;
 import com.example.demo.service.CommentService;
 import com.example.demo.util.HibernateProxyTypeAdapter;
+import com.example.demo.util.ResponseEntity;
 import com.google.gson.GsonBuilder;
 
 /**
@@ -55,8 +54,10 @@ public class CommentsController {
 	public String createComment(@RequestBody CommentModel comment) {
 		Comment createdComment = service.createComment(comment);
 		logger.debug("Called CommentController.createComment");
+		String message="Comment Added Successfully.";
+		ResponseEntity<?> response=new ResponseEntity<Comment>(message, 200, createdComment);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(createdComment);
+				.toJson(response);
 	}
 
 	@PostMapping(value="/updateComment",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -64,8 +65,10 @@ public class CommentsController {
 	public String updateComment(@RequestBody CommentModel comment) {
 		Comment updatedComment = service.updateComment(comment);
 		logger.debug("Called CommentController.updateComment");
+		String message="Comment Updated Successfully.";
+		ResponseEntity<?> response=new ResponseEntity<Comment>(message, 200, updatedComment);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(updatedComment);
+				.toJson(response);
 	}
 
 	@PutMapping(value="/deActivateCommentByID/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,8 +77,10 @@ public class CommentsController {
 	public String deleteById(@PathVariable Long id) {
 		Comment deletedComment = service.deleteById(id);
 		logger.debug("Called CommentController.deleteById");
+		String message="Comment Deleted Successfully.";
+		ResponseEntity<?> response=new ResponseEntity<Comment>(message, 200, deletedComment);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(deletedComment);
+				.toJson(response);
 	}
 
 	@GetMapping(value="/getAllCommentList",produces = MediaType.APPLICATION_JSON_VALUE)

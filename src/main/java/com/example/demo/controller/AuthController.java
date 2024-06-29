@@ -47,9 +47,14 @@ public class AuthController {
 	        }
 
 	        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
-	        User user=userRepo.findByUsername(authenticationRequest.getUserName());
+	        User user=userRepo.findTop1ByEmail(authenticationRequest.getUserName());
 	        final String jwt = jwtUtil.generateToken(userDetails);
+	        AuthResponse auth=new   AuthResponse(authenticationRequest,jwt,user.getFullName(),user.getId(),user.getRoles());
+	        
+	        com.example.demo.util.ResponseEntity<AuthResponse> response=new com.example.demo.util.ResponseEntity<AuthResponse>();
+	        String message="Login Successful.";
+	        response=new com.example.demo.util.ResponseEntity<AuthResponse>(message, 200, auth);
 
-	        return ResponseEntity.ok(new AuthResponse(authenticationRequest,jwt,user.getFullName(),user.getId(),user.getRoles()));
+	        return ResponseEntity.ok(response);
 	    }
 	}

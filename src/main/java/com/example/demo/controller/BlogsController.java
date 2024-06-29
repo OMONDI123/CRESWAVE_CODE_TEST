@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +24,9 @@ import com.example.demo.entity.Blogs;
 import com.example.demo.model.BlogsModel;
 import com.example.demo.service.BlogService;
 import com.example.demo.util.HibernateProxyTypeAdapter;
+import com.example.demo.util.ResponseEntity;
 import com.google.gson.GsonBuilder;
+
 /**
  * @author austine
  *
@@ -40,7 +40,7 @@ public class BlogsController {
 	private BlogService blogservice;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@GetMapping(value="/getBlogsById/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getBlogsById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getBlogsById(@PathVariable Long id) {
@@ -49,36 +49,42 @@ public class BlogsController {
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(blogs);
 	}
 
-	@PostMapping(value="/createBlogs",produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/createBlogs", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ResponseBody
-	public String createBlogs(@Valid BlogsModel Blogs,@RequestParam("file") MultipartFile file) {
-		Blogs createdBlogs = blogservice.createBlogs(Blogs,file);
+	public String createBlogs(@Valid BlogsModel Blogs, @RequestParam("file") MultipartFile file) {
+		Blogs createdBlogs = blogservice.createBlogs(Blogs, file);
 		logger.debug("Called BlogsController.createBlogs");
+		String message = "Blog Added Successfully.";
+		ResponseEntity<?> response = new ResponseEntity<Blogs>(message, 200, createdBlogs);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(createdBlogs);
+				.toJson(response);
 	}
 
-	@PostMapping(value="/updateBlogs",produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/updateBlogs", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public String updateBlogs(@Valid BlogsModel Blogs,@RequestParam("file") MultipartFile file) {
-		Blogs updatedBlogs = blogservice.updateBlogs(Blogs,file);
+	public String updateBlogs(@Valid BlogsModel Blogs, @RequestParam("file") MultipartFile file) {
+		Blogs updatedBlogs = blogservice.updateBlogs(Blogs, file);
 		logger.debug("Called BlogsController.updateBlogs");
+		String message = "Blog Updated Successfully.";
+		ResponseEntity<?> response = new ResponseEntity<Blogs>(message, 200, updatedBlogs);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(updatedBlogs);
+				.toJson(response);
 	}
 
-	@PutMapping(value="/deActivateBlogsByID/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/deActivateBlogsByID/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ResponseBody
 	public String deleteById(@PathVariable Long id) {
 		Blogs deletedBlogs = blogservice.deleteById(id);
 		logger.debug("Called BlogsController.deleteById");
+		String message = "Blog Deleted Successfully.";
+		ResponseEntity<?> response = new ResponseEntity<Blogs>(message, 200, deletedBlogs);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(deletedBlogs);
+				.toJson(response);
 	}
 
-	@GetMapping(value="/getAllblogsList",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getAllblogsList", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getAllblogs() {
@@ -87,7 +93,7 @@ public class BlogsController {
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(blogs);
 	}
 
-	@GetMapping(value="/getActiveblogs",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getActiveblogs", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getActiveblogs() {
@@ -97,7 +103,7 @@ public class BlogsController {
 	}
 
 //Typical Pagination implementation
-	@GetMapping(value="/getblogsByPage/{page}/{size}",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/getblogsByPage/{page}/{size}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@ResponseBody
 	public String getblogsByPage(@PathVariable int page, @PathVariable int size) {

@@ -86,7 +86,7 @@ public class CommentServiceImpl implements CommentService{
 		try {
 			Comment comment=repository.findById(comment1.getId()).get();
 			if(comment==null) {
-				throw new SetUpExceptions("User with ID "+comment1.getUser_id()+" not found");
+				throw new SetUpExceptions("Comment with ID "+comment1.getUser_id()+" not found");
 			}
 			comment.setActive(true);
 			comment.setMessage(comment1.getMessage());

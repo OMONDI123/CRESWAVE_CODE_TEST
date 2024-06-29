@@ -140,7 +140,7 @@ public class BlogsServiceImpl implements BlogService {
 				blogs.setName(blogModel.getName());
 				blogs.setDescription(blogModel.getDescription());
 				blogs.setApproved(true);
-				String FILE_PATH = "http://localhost/tutorials/uploads/" + fileName;
+				String FILE_PATH = "http://localhost/blogs/uploads/" + fileName;
 				blogs.setFilepath(FILE_PATH);
 				blogs.setFileName(fileName);
 
@@ -225,5 +225,118 @@ public class BlogsServiceImpl implements BlogService {
 			throw new SetUpExceptions("Could not find Blogs by Content");
 		}
 	}
+	//Creating an Excell report
+	/*public OutputModel generateStockTransferExcell() {
+    Workbook workbook = new XSSFWorkbook();
+    OutputModel model = new OutputModel();
+    Sheet sheet = workbook.createSheet("Stock Transfers");
+    FileOutputStream outputStream = null;
+    String filePath = "/home/austine/Creswave-Projects/SWIFTSYNC/stock_transfer.xlsx";
+    File file = new File(filePath);
+
+    try {
+        outputStream = new FileOutputStream(file);
+
+        // Header for the report
+        Row reportHeader = sheet.createRow(0);
+        Cell reportHeaderCell = reportHeader.createCell(0);
+        reportHeaderCell.setCellValue("Stock Transfers");
+
+        CellStyle reportHeaderStyle = workbook.createCellStyle();
+        Font reportHeaderFont = workbook.createFont();
+        reportHeaderFont.setBold(true);
+        reportHeaderFont.setFontHeightInPoints((short) 15);
+        reportHeaderFont.setColor(IndexedColors.LIGHT_BLUE.getIndex());
+        reportHeaderStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        reportHeaderStyle.setFont(reportHeaderFont);
+        reportHeaderCell.setCellStyle(reportHeaderStyle);
+
+        // Merge cells for the report header
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
+        
+        // Header for the report
+        Row reportHeaderDateFrom = sheet.createRow(1);
+        Cell reportHeaderCellDateFrom = reportHeaderDateFrom.createCell(0);
+        reportHeaderCellDateFrom.setCellValue("Date From");
+
+        CellStyle reportHeaderStyleDateFrom = workbook.createCellStyle();
+        Font reportHeaderFontDateFrom = workbook.createFont();
+        reportHeaderFontDateFrom.setBold(true);
+        reportHeaderFontDateFrom.setFontHeightInPoints((short) 15);
+        reportHeaderFontDateFrom.setColor(IndexedColors.LIGHT_BLUE.getIndex());
+        reportHeaderStyleDateFrom.setAlignment(HorizontalAlignment.CENTER);
+
+        reportHeaderStyleDateFrom.setFont(reportHeaderFont);
+        reportHeaderCellDateFrom.setCellStyle(reportHeaderStyle);
+
+        // Merge cells for the report header
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
+
+        // Create header row for the columns
+        Row headerRow = sheet.createRow(2);
+        String[] columns = {"Product", "Branch From", "Store From","Debit Quantity", "Branch To", "Store To", "Credit Quantity"};
+        CellStyle headerStyle = workbook.createCellStyle();
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeightInPoints((short) 12);
+        headerFont.setColor(IndexedColors.LIGHT_BLUE.getIndex());
+        headerStyle.setFont(headerFont);
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Fetch data
+        List<StockTransfer> items = (List<StockTransfer>) stockTransferRepo.findAllStockTransferWhereProductToNotNull();
+        int rowNum = 3;
+        for (StockTransfer item : items) {
+            Row row = sheet.createRow(rowNum++);
+            HospitalBranch branchFrom = hospitalBranchRepository.findById(item.getBranchIdFrom());
+            HospitalBranch branchTo = hospitalBranchRepository.findById(item.getBranchIdTo());
+            Product product = productRepository.findById(item.getProductId());
+            Store storeFrom = storeRepo.findById(item.getStoreFrom());
+            Store storeTo = storeRepo.findById(item.getStoreTo());
+
+            // Ensure that none of the entities are null before accessing their properties
+            if (product != null && branchFrom != null && branchTo != null && storeFrom != null && storeTo != null) {
+                row.createCell(0).setCellValue(product.getProductName());
+                row.createCell(1).setCellValue(branchFrom.getBranchName());
+                row.createCell(2).setCellValue(storeFrom.getStoreName());
+                row.createCell(3).setCellValue(item.getDebitQuantity());
+                row.createCell(4).setCellValue(branchTo.getBranchName());
+                row.createCell(5).setCellValue(storeTo.getStoreName());
+                row.createCell(6).setCellValue(item.getCreditQuantity());
+            } else {
+                // Handle null values appropriately (e.g., log a warning, skip the row, etc.)
+                System.out.println("Warning: One of the entities is null for StockTransfer ID: " + item.getId());
+            }
+        }
+
+        // Write the output to response
+        workbook.write(outputStream);
+        model.setFileUrl(filePath);
+        model.setFileLocation(filePath);
+    } catch (IOException e) {
+        e.printStackTrace();
+        // Additional error handling (e.g., log the error, rethrow the exception, etc.)
+    } finally {
+        try {
+            if (workbook != null) {
+                workbook.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return model;
+} */
+
+
 
 }

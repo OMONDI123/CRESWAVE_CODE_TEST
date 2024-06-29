@@ -7,11 +7,11 @@ import com.example.demo.entity.Roles;
 
 public class AuthResponse {
 	private LoginRequest loginRequest;
-	private UserModel model;
 	private String jwtToken;
 	private String fullName;
 	private long user_id;
-	private Set<Roles> roles=new HashSet();
+
+	private Set<Roles> roles=new HashSet<Roles>();
 	public LoginRequest getLoginRequest() {
 		return loginRequest;
 	}
@@ -57,18 +57,6 @@ public class AuthResponse {
 	}
 	public void setRoles(Set<Roles> roles) {
 		this.roles = roles;
-	}
-	/**
-	 * @return the model
-	 */
-	public UserModel getModel() {
-		return model;
-	}
-	/**
-	 * @param model the model to set
-	 */
-	public void setModel(UserModel model) {
-		this.model = model;
 	}
 	
 	

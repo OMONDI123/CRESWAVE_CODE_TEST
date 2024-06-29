@@ -5,7 +5,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -27,6 +26,7 @@ import com.example.demo.entity.Roles;
 import com.example.demo.model.RoleModel;
 import com.example.demo.service.RoleService;
 import com.example.demo.util.HibernateProxyTypeAdapter;
+import com.example.demo.util.ResponseEntity;
 import com.google.gson.GsonBuilder;
 
 /**
@@ -48,6 +48,7 @@ public class RoleController {
 	public String getRoleById(@PathVariable Long id) {
 		Roles role = service.getRolesById(id);
 		logger.debug("Called RoleController.getRoleById");
+		
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(role);
 	}
 
@@ -57,8 +58,10 @@ public class RoleController {
 	public String createRole(@RequestBody RoleModel role) {
 		Roles createdRole = service.createRoles(role);
 		logger.debug("Called RoleController.createRole");
+		String message="Role Added Successfully.";
+		ResponseEntity<?> response=new ResponseEntity<Roles>(message, 200, createdRole);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(createdRole);
+				.toJson(response);
 	}
 
 	@PostMapping(value = "/updateRole", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,8 +69,10 @@ public class RoleController {
 	public String updateRole(@Valid RoleModel role) {
 		Roles updatedRole = service.updateRoles(role);
 		logger.debug("Called RoleController.updateRole");
+		String message="Role Updated Successfully.";
+		ResponseEntity<?> response=new ResponseEntity<Roles>(message, 200, updatedRole);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(updatedRole);
+				.toJson(response);
 	}
 
 	@PutMapping(value = "/deActivateRoleByID/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -76,8 +81,10 @@ public class RoleController {
 	public String deleteById(@PathVariable Long id) {
 		Roles deletedRole = service.deleteById(id);
 		logger.debug("Called RoleController.deleteById");
+		String message="Role Deleted Successfully.";
+		ResponseEntity<?> response=new ResponseEntity<Roles>(message, 200, deletedRole);
 		return new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create()
-				.toJson(deletedRole);
+				.toJson(response);
 	}
 
 	@GetMapping(value = "/getAllRoleList", produces = MediaType.APPLICATION_JSON_VALUE)
